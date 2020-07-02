@@ -19,11 +19,13 @@ import styles from "./styles";
 import * as actionCreators from "../../store/actions";
 
 import AddButton from "../Buttons/AddButton";
+import DashboardButton from "../Buttons/DashboardButton";
 
 class RestaurantList extends Component {
+  componentDidMount() {
+    this.props.onStart();
+  }
   render() {
-    const handlePress = () => this.props.navigation.navigate("Analytics");
-
     return (
       <Container style={styles.authContainer}>
         <Content>
@@ -38,7 +40,6 @@ class RestaurantList extends Component {
                   thumbnail
                   button
                   style={styles.listitem}
-                  onPress={handlePress}
                 >
                   <Body transparent>
                     <Text style={styles.text}>{restaurant.name}</Text>
@@ -74,10 +75,17 @@ RestaurantList.navigationOptions = {
   backgroundColor: "snow",
   titleColor: "black",
   headerRight: () => <AddButton />,
+  headerLeft: () => <DashboardButton />,
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    onStart: () => {
+      dispatch(actionCreators.getBakeryCount(5));
+      dispatch(actionCreators.getAmericanCount(1));
+      dispatch(actionCreators.getAsianCount(3));
+      dispatch(actionCreators.getFastFoodCount(40));
+    },
     handleRemove: (restaurant) =>
       dispatch(actionCreators.removeRestaurant(restaurant)),
   };

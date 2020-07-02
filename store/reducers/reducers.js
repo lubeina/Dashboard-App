@@ -10,7 +10,11 @@ const reducer = (state = initialState, { type, payload, id }) => {
       return { ...state, restaurants: state.restaurants.concat(payload) };
 
     case "REMOVE_RESTAURANT":
-      return state.filter((item) => item !== payload);
+      let updatedItems = state.restaurants.filter((item) => item !== payload);
+      return {
+        ...state,
+        restaurants: updatedItems,
+      };
     default:
       return state;
   }

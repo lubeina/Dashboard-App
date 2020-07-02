@@ -2,53 +2,46 @@ import React, { Component } from "react";
 
 // Style Components
 import { Container, Text, Header } from "native-base";
-import { LineChart } from "react-native-charts-wrapper";
-import { VictoryBar, VictoryChart, VictoryTheme } from "victory-native";
+import {
+  VictoryBar,
+  VictoryChart,
+  VictoryTheme,
+  VictoryPie,
+} from "victory-native";
 import { connect } from "react-redux";
 import * as actionCreators from "../../store/actions";
+import styles from "./styles";
 
 class Analytics extends Component {
-  componentDidMount() {
-    this.props.onStart();
-  }
-  bakery = this.props.analysis.results_found;
-
   data = [
-    { restaurant: 1, earnings: 6755 },
-    { restaurant: 2, earnings: 16500 },
-    { restaurant: 3, earnings: 14250 },
-    { restaurant: 4, earnings: 19000 },
+    { x: "Bakery", y: this.props.bakery.results_found },
+    { x: "Asian", y: this.props.asian.results_found },
+    { x: "Fast Food", y: this.props.fast_food.results_found },
+    { x: "American", y: this.props.american.results_found },
   ];
   render() {
-    console.log(this.bakery);
     return (
       <Container>
-        <Text>Analytics</Text>
-        <VictoryChart width={350} theme={VictoryTheme.material}>
-          <VictoryBar data={this.data} x="quarter" y="earnings" />
-        </VictoryChart>
+        <Text style={styles.authTitle}>Cusines in New York </Text>
+        <VictoryPie data={this.data} />
       </Container>
     );
   }
 }
 Analytics.navigationOptions = {
-  title: "MishiPay",
+  title: "Analytics",
   backgroundColor: "snow",
   titleColor: "black",
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    onStart: () => {
-      dispatch(actionCreators.getBakeryCount(5));
-    },
-  };
-};
-
 const mapStateToProps = (state) => {
+  console.log(state.rest_reducer.american.results_found);
   return {
-    analysis: state.rest_reducer.analysis,
+    bakery: state.rest_reducer.bakery,
+    american: state.rest_reducer.american,
+    asian: state.rest_reducer.asian,
+    fast_food: state.rest_reducer.fast_food,
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Analytics);
+export default connect(mapStateToProps)(Analytics);
